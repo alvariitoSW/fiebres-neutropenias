@@ -87,7 +87,7 @@ function cuffMando(k) {
 }
 function ponerEstado(clave, { llenar = true } = {}) {
   const E = D.ESTADOS[clave]; if (!E) return;
-  est.clave = clave; est.pac = pacDe(E.pac); topeMando = null;
+  est.clave = clave; est.pac = pacDe(E.pac); topeMando = null; est.ansiedad = !!E.ansiedad; est.opi = false;
   if (est.detenido) { est.detenido = false; tope.quitar('detenido'); }
   est.conPmus = !!E.pmus; est.cpap = !!E.cpap; PANT.verPmus(est.conPmus); SEG = E.seg ?? 12;
   P.ajustarYa({ ps: 10, frEsp: 16, pmus: 0, tin: 0.8, frNeural: 20, retraso: null, ...E.resp });
@@ -176,6 +176,7 @@ function pintarCifrasTodo() {
     celda('cstat', 'Cstat', l.cstat != null ? f0(l.cstat) : (r.modo === 'psv' ? 'no en PSV' : 'haz pausa'), l.cstat == null ? 'mL/cmH₂O' : (l.conPeepTotal ? 'PEEP total' : 'PEEP aplicada') + ' · −3 mL × pico (tubo)', l.cstat == null ? '' : l.cstat < 25 ? 'no' : l.cstat >= 50 ? 'si' : ''),
     celda('dp', 'P. conducción', l.dp != null ? f1(l.dp) : (r.modo === 'psv' ? 'no en PSV' : 'haz pausa'), l.conPeepTotal ? 'meseta − PEEP total' : 'meseta − PEEP aplicada'),
     celda('vtkg', 'Vt/kg PBW', f1(l.vtExh != null ? l.vtExh / kg : null), `PBW ${f1(kg)} kg`, l.vtExh != null && l.vtExh / kg > 8 ? 'no' : ''),
+    ...(est.clave.startsWith('sbt') ? [celda('fvt', 'FR/Vt', l.vtExh > 0 ? f0((l.frReal || r.frEsp) / (l.vtExh / 1000)) : null, 'resp/min por L · éxito 60-105 (Tabla 30.1)', l.vtExh > 0 ? ((l.frReal || r.frEsp) / (l.vtExh / 1000) > 105 ? 'no' : 'si') : '')] : []),
     ...(est.cuff ? [CU.celda(est.cuff, l, celda)] : []),
     celda('flujofin', 'Flujo fin esp.', f0(l.flujoFinEsp), l.flujoFinEsp != null && l.flujoFinEsp < -2 ? 'L/min · no llega a cero' : 'L/min · llega a cero', l.flujoFinEsp != null && l.flujoFinEsp < -2 ? 'no' : 'si'),
   ].join('');
@@ -187,7 +188,7 @@ function pintarFrase() {
   const E = D.ESTADOS[est.clave];
   const S = est.sello || NX.selloFrase();   // un tope pasado manda sobre la frase del estado: la frase viva dice lo que le pasa al paciente
   $('frase-txt').innerHTML = S ? `<span class="estado">${S.titulo}</span>${S.texto} ${org(S.origen, false)}`
-    : `<span class="estado">${E.tit}</span>${E.frase} ${org('modelo · umbrales: ficha')}`;
+    : `<span class="estado">${E.tit}</span>${est.opi && E.fraseOpi ? E.fraseOpi : E.frase} ${org('modelo · umbrales: ficha')}`;
   $('ficha-pac').innerHTML = `<b>${est.pac.nombre}</b>, ${est.pac.linea}`;
   $('pacientes').querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.pac === est.pac.k)));
   $('leyenda').querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.estado === est.clave)));
@@ -267,7 +268,8 @@ function pintarMandos() {
     if (r.modo === 'vcv') h += desl('vt', 'Vt', r.vt, 200, Math.max(r.vt, Math.min(800, Math.floor(TOPE.vtkgMax * kg / 10) * 10)), 10, 'mL', `${f1(r.vt / kg)} mL/kg PBW · tope 12: ARDSNet 2000`) + desl('flujo', 'Flujo', r.flujo, 30, flujoTope(r.vt), 5, 'L/min', 'ficha: 60, ≥80 si distrés');
     else if (psv) h += desl('ps', 'P. soporte', r.ps, est.cpap ? 0 : 5, 20, 1, 'cmH₂O', 'sobre la PEEP · ilustrativo (Marino usa 10 en IMV)');
     else h += desl('pinsp', 'P. insuflación', r.pinsp, 5, 30, 1, 'cmH₂O', 'sobre la PEEP') + desl('ie', 'I:E', r.ie, 1, 4, 0.5, '', `1:${String(r.ie).replace('.', ',')}`);
-    h += psv ? desl('frEsp', 'FR del paciente', r.frEsp, 8, 30, 1, 'rpm', 'la pone él · ilustrativo') : desl('fr', 'FR', r.fr, 8, 35, 1, 'rpm', 'ficha cap. 27 p. 14: no pasar de 35');
+    h += psv ? desl('frEsp', 'FR del paciente', r.frEsp, est.ansiedad ? D.ANSIEDAD.frMin : 8, est.ansiedad ? D.ANSIEDAD.frMando : 30, 1, 'rpm', est.ansiedad ? `tope ${D.ANSIEDAD.frMax}: FR <40 es predictor de éxito (Marino cap. 30 p. 52) · la FR que pone él: ilustrativo` : 'la pone él · ilustrativo') : desl('fr', 'FR', r.fr, 8, 35, 1, 'rpm', 'ficha cap. 27 p. 14: no pasar de 35');
+    if (est.ansiedad) h += `<div class="rejilla" style="--n:1"><button type="button" class="tog" data-m="opiaceo" aria-pressed="${est.opi}">Opiáceo<small>calma la disnea: ${est.opi ? 'puesto' : 'FR 22, menos esfuerzo'} (cap. 30 p. 55)</small></button></div>`;
     h += desl('pmax', 'Alarma de presión', r.pmax ?? 40, TOPE.pmaxMin, TOPE.pmaxMax, 5, 'cmH₂O', 'ilustrativo');
     h += `<p class="dock-nota dock-grupo"><b>Oxigenar</b> (PaO₂): FiO₂ y PEEP</p>`;
     h += desl('fio2', 'FiO₂', est.fio2, 21, 100, 1, '%', 'ilustrativo: el modelo no calcula gases') + desl('peep', 'PEEP', r.peep, 0, 20, 1, 'cmH₂O', 'ficha cap. 27 p. 15: 5-8; Tabla 27.1 p. 14: 5');
@@ -294,15 +296,23 @@ $('dock-panel').addEventListener('input', (ev) => {
   const i = ev.target.closest('input[type=range]'); if (!i) return;
   cambiarMando(i.dataset.m, +i.value);
 });
+// FR espontánea por encima de 40 (sbt-ansiedad): el mando se queda en 40, que es el predictor «FR <40» de la Tabla 30.1
+function selloFr(pedido) {
+  const l = estable(P.S.resp, P.S.pulmon), fvt = l?.vtExh > 0 ? (l.frReal || D.ANSIEDAD.frMax) / (l.vtExh / 1000) : null;
+  return { k: 'fr-predictor', titulo: 'Predictor fallido: FR no menor de 40', texto: `Pides ${f0(pedido)} por minuto y el mando se queda en ${D.ANSIEDAD.frMax}: la FR <40 es un predictor de éxito de la prueba y a 40 o más ya falla. A ${D.ANSIEDAD.frMax} Benito mueve ${f0(l?.vtExh)} mL (${f1(l?.vtExh / PBW())} mL/kg), volumen minuto ${f1(l?.vm)} L/min y FR/Vt ${f0(fvt)}: si la taquipnea persiste con el Vt aumentado, se piensa en ansiedad; con el Vt bajo, vuelve al respirador.`, cita: D.C.sbt, origen: 'ficha, Tabla 30.1 p. 52 y cap. 30 p. 54 · cifras: ilustrativo' };
+}
 function cambiarMando(k, v) {
   if (k === 'dpsop') k = 'ps';   // la rueda ΔPsop de la pantalla es la presión de soporte
   if (k === 'canula') { canula(v); if (REDUCIR || est.pausa) llenarMonitor(); pintarMandos(); pintarCifrasTodo(); pintarMonitor(); return; }
   if (k === 'cuff') { fugar(v); if (REDUCIR || est.pausa) llenarMonitor(); pintarMandos(); pintarTodo(); return; }
   if (k === 'horas') { girar(v, false); if (REDUCIR || est.pausa) llenarMonitor(); pintarMandos(); pintarTodo(); return; }
   if (k === 'fio2') { est.fio2 = v; if (est.hfno) { canula(est.q); pintarMandos(); } pintarCifrasTodo(); return; }   // ilustrativo: el modelo no tiene gases
+  if (est.ansiedad && (k === 'frEsp' || k === 'pmus')) est.opi = false;
+  const pedido = v; if (est.ansiedad && k === 'frEsp') v = Math.min(v, D.ANSIEDAD.frMax);
   const antes = k === 'c' || k === 'r' ? P.S.pulmon[k] : P.S.resp[k];
   if (k === 'c' || k === 'r') { P.pulmonAjustar({ [k]: v }); P.pulmonAjustar({ rEsp: P.S.pulmon.r * est.factorEsp }); } else P.ajustar({ [k]: v });
   guardarTope(k, antes);
+  if (est.ansiedad && k === 'frEsp' && pedido > D.ANSIEDAD.frMax && !topeMando) topeMando = selloFr(pedido);
   if (k === 'vt' && P.S.resp.modo === 'vcv' && P.S.resp.flujo > flujoTope(P.S.resp.vt)) P.ajustar({ flujo: flujoTope(P.S.resp.vt) });   // Ti mínimo (ilustrativo)
   if (REDUCIR || est.pausa) llenarMonitor();
   pintarMandos(); pintarCifrasTodo(); pintarMonitor();
@@ -346,6 +356,7 @@ $('dock-panel').addEventListener('click', (ev) => {
   else if (k === 'pos') { const h = est.prono.h; girar(b.dataset.v === 'supino' ? 0 : b.dataset.v === 'post' ? h : h || D.PRONO.inicio, b.dataset.v === 'post'); }
   else if (k === 'ci') { est.ci[b.dataset.v] = !est.ci[b.dataset.v]; girar(est.prono.h, est.prono.post); }
   else if (['edema', 'ester', 'apagar', 'extubar', 'esperar', 'reintubar'].includes(k)) cuffMando(k);
+  else if (k === 'opiaceo') { est.opi = !est.opi; pintarFrase(); P.ajustar(est.opi ? { frEsp: D.ANSIEDAD.frOpi, frNeural: D.ANSIEDAD.frOpi, pmus: D.ANSIEDAD.pmusOpi } : { frEsp: 30, frNeural: 30, pmus: D.ANSIEDAD.pmus }); topeMando = null; }
   else if (k === 'boca') { est.boca = !est.boca; canula(est.q); }
   if (REDUCIR || est.pausa) llenarMonitor();
   pintarMandos(); pintarCifrasTodo(); pintarMonitor(); medirDock();

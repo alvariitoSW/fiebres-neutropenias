@@ -351,6 +351,7 @@ for (const k of ORDEN_ESTADOS) {
   ok(f1v >= 60 && f1v <= 105, `E4a SBT que sale bien: FR/Vt ${f1v} entre 60 y 105 (Tabla 30.1)`); await limpio('sbt-ok');
   await abrir('sbt-fracaso'); await espera(900); await llenar(); e = await esf(); const f2v = +(e.info.match(/FR\/Vt (\d+)/) || [])[1];
   ok(f2v > 105, `E4a SBT que fracasa: rápida y superficial, FR/Vt ${f2v} > 105 (Marino cap. 30 p. 52)`); await limpio('sbt-fracaso'); await foto('e4a-sbt');
+  await abrir('sbt-ansiedad'); await espera(900); await llenar(); ok(await cifra('fvt') >= 60 && await cifra('fvt') <= 105 && await cifra('vtkg') >= 6 && await cifra('vtkg') <= 7, `sbt-ansiedad: rápido y profundo, casilla f/Vt ${await cifra('fvt')} (60-105) con ${await cifra('vtkg')} mL/kg`); await limpio('sbt-ansiedad');
 }
 // E4b · el neumotórax a tensión (par 9 de papel-pulmon.md §6): pico y meseta suben juntos, la PAM y la SpO₂ caen, el tope deja solo la descompresión
 {
