@@ -45,9 +45,9 @@ export const MAYEUTICA_FIEBRE_1 = {
       { id: 'fbr-g4', corto: 'fiebre alta', tipo: 'test', fuente: 'ma-fiebre-inflamacion',
         enunciado: 'Un paciente tiene 39,8 °C y otro 38,4 °C. ¿Pesa más la fiebre de 39,8 °C para decir «es una infección»?',
         opciones: [
-          { t: 'Sí: cuanto más alta es la fiebre, más probable es que haya una infección detrás', porque: 'Ni la presencia ni la altura de la fiebre se correlacionan con la infección. Pedirías antibióticos por la cifra y dejarías de buscar la causa inflamatoria no infecciosa.' },
+          { t: 'Sí: cuanto más alta la fiebre, más probable la infección', porque: 'Ni la presencia ni la altura de la fiebre se correlacionan con la infección. Pedirías antibióticos por la cifra y dejarías de buscar la causa inflamatoria no infecciosa.' },
           { t: 'Sí, pero solo por encima de 39 °C', porque: 'La ficha no da ningún corte: hay fiebres altas sin infección e infecciones graves sin fiebre. Con ese corte atribuirías infección a una fiebre inflamatoria.' },
-          { t: 'No: ni la presencia ni la altura se correlacionan con infección o gravedad', ok: true }],
+          { t: 'No: ni la presencia de fiebre ni su altura se correlacionan con infección ni con gravedad', ok: true }],
         explicacion: 'Las citocinas inflamatorias (pirógenos endógenos) actúan sobre el hipotálamo: <span class="hl">cualquier inflamación sistémica da fiebre</span>. Por eso <span class="hl-rojo">el 50 % de las fiebres de la UCI no tienen infección</span> y distinguirlo ahorra antibióticos.' },
       { id: 'fbr-g5', corto: 'atelectasia', tipo: 'test', fuente: 'ma-fiebre-postop · mar-img-44-2',
         enunciado: 'Primer día tras cirugía cardíaca (100 pacientes, Figura 44.2): casi el 90 % de los febriles tienen atelectasia. ¿Es la atelectasia la causa de la fiebre?',
@@ -99,8 +99,8 @@ export const MAYEUTICA_FIEBRE_1 = {
       { id: 'fbr-e4', corto: 'fiebre no hemolítica', tipo: 'test', fuente: 'ma-fiebre-tev-transfusion · merino-riesgos',
         enunciado: 'La fiebre no hemolítica de una transfusión de hematíes aparece:',
         opciones: [
-          { t: 'Durante la transfusión o en las 6 h siguientes', ok: true },
-          { t: 'A los 3-5 días de la transfusión, por hemólisis del donante', porque: 'No es hemolítica: la causan anticuerpos del receptor contra leucocitos del donante. Esperar días hace atribuirla a otra cosa o confundirla con una reacción grave.' },
+          { t: 'Durante la transfusión o en las 6 h siguientes, por anticuerpos del receptor contra leucocitos del donante', ok: true },
+          { t: 'A los 3-5 días, por hemólisis del donante', porque: 'No es hemolítica: la causan anticuerpos del receptor contra leucocitos del donante. Esperar días hace atribuirla a otra cosa o confundirla con una reacción grave.' },
           { t: 'Más con plaquetas que con hematíes', porque: 'Es al revés: con hematíes es la reacción adversa más frecuente; con plaquetas es infrecuente (~1 por 1.000 unidades de donante único).' }],
         explicacion: 'Es la reacción adversa más frecuente de los hematíes: <span class="hl-rojo">durante la transfusión o en las 6 h siguientes</span>, por anticuerpos del receptor contra leucocitos del donante; más en politransfundidos. Con plaquetas, ~1 por 1.000 unidades.' },
       { id: 'fbr-e5', corto: 'fármaco sin exantema', tipo: 'test', fuente: 'ma-fiebre-farmacos · ma-tabla-44-3-hallazgos',
