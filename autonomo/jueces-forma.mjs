@@ -47,6 +47,7 @@ export const BANCOS = [
     { nombre: 'receptor vivo', datos: 'js/data/receptor-vivo-mayeutica.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'hepatocito vivo', datos: 'js/data/hepatocito-vivo-mayeutica.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'termostato vivo', datos: 'js/data/termostato-vivo-mayeutica.js', motor: 'js/core/mayeutica-motor.js' },
+    { nombre: 'eje hormonal vivo', datos: 'js/data/eje-vivo-mayeutica.js', motor: 'js/core/mayeutica-motor.js' },
 ];
 
 /* ---------- Los modelos vivos en el navegador ---------- */
@@ -92,8 +93,8 @@ export const MODELOS = {
     // El termostato vivo (b5): Explorar | Apuesta | Error | Caso | Preguntas (Mayéutica del motor común)
     'termostato-vivo': { raiz: '#tmv-raiz', enlace: { especialidad: 'libros', view: 'termostatoVivo' }, clave: 'termostatoVivo', modo: { explorar: '#tmv-modo-explorar', mayeutica: '#tmv-modo-preguntas' },
         estados: ['fiebre', 'golpe', 'hm', 'snm', 'ss', 'hipo', 'juega'] },
-    // El eje hormonal vivo (b6b, pieza 1b): sin Mayéutica todavía (pieza 2); «Explorar» es volver al primer paciente. El estado es el paciente.
-    'eje-vivo': { raiz: '#eje-raiz', enlace: { especialidad: 'libros', view: 'ejeVivo' }, clave: 'ejeVivo', modo: { explorar: '#eje-chips [data-pre="toribio"]' },
+    // El eje hormonal vivo (b6b): Explorar | Apuesta | Error | Caso | Preguntas (Mayéutica del motor común). El estado es el paciente.
+    'eje-vivo': { raiz: '#eje-raiz', enlace: { especialidad: 'libros', view: 'ejeVivo' }, clave: 'ejeVivo', modo: { explorar: '#eje-modo-explorar', mayeutica: '#eje-modo-preguntas' },
         estados: ['toribio', 'bibiana', 'sinforoso', 'lucrecia', 'obdulia', 'policarpo', 'fulgencio'] },
     // El receptor vivo (b3)
     'receptor-vivo': { raiz: '#rcv-raiz', enlace: { especialidad: 'libros', view: 'receptorVivo' }, clave: 'receptorVivo', modo: { explorar: '#rcv-modo-explorar', mayeutica: '#rcv-modo-preguntas' },
