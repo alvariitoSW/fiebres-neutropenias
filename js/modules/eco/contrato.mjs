@@ -104,9 +104,9 @@ export const SEPTO_RELATIVA = 0.5;
 // TOPE DIASTÓLICO (154, decisión del usuario 01/11/2026): con `pvi` y fuera de la sístole (puerta apagada) el signo satura suave en
 // SEPTO_TOPE_DIAST (s → T·tanh(s/T)). Sin él la telediástole del TEP saturaba (IE 1,60, pVD 13 / pVI 4); en la clínica el IE de
 // telediástole del TEP agudo es 1,21 ± 0,21 (Demertzis 2025, PMC12485522) y 1,26 ± 0,11 en la sobrecarga de presión crónica (Ryan 1985,
-// PMID 3973294). Con 0,25 el TEP del defecto da IE TD 1,32 y la HP crónica 1,30; el normal no cambia (signo ~0,06). Valor ILUSTRATIVO
-// (calibrado a esas dos cifras). La sístole (puerta = 1, King 1983) y la llamada de un argumento quedan como estaban.
-export const SEPTO_TOPE_DIAST = 0.25;
+// PMID 3973294). Con 0,29 el TEP da IE TD 1,38 (defecto) y 1,40 (100 %), y la HP crónica 1,35; el normal no cambia (signo ~0,06).
+// Valor ILUSTRATIVO: el más alto que deja el TEP ≤1,4; más alto aún lo pediría el EI del dibujo nuevo (domo-septo.test, HP ≥1,1 en TD). La sístole (puerta = 1, King 1983) y la llamada de un argumento quedan como estaban.
+export const SEPTO_TOPE_DIAST = 0.29;
 export const septoSignoDe = (grad, pvi) => {
   const w = pvi == null ? 0 : Math.min(1, Math.max(0, (pvi - 20) / 20)), puerta = w * w * (3 - 2 * w);
   const ge = grad + SEPTO_RELATIVA * puerta * (pvi ?? 0);

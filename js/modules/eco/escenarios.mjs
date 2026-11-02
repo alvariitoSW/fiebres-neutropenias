@@ -45,10 +45,13 @@ const tepU = (g) => Math.max(0, g) ** TEP_CURVA;
 // 154 (decisión del usuario, 01/11/2026): en la sobrecarga de presión el VD se contrae MÁS que el VI (Marcus 2008, J Am Coll Cardiol
 // 51:750, PMID 18279740: pico del acortamiento VD 387 frente a VI 293 ms, ×1,32, con el mismo comienzo) y el tabique se abomba al máximo ya
 // cerrada la aórtica. Antes el escenario acortaba el VD (×(1 − 0,3 u)) y la pulmonar cerraba 34 ms ANTES que la aórtica. Ahora: subida algo
-// precoz (f 0,62 → 0,24 con u = 1: domo del chorro de IT, Zoghbi 2017, Fig. 29, PDF p. 49) y caída larga (durVd ×(1 + 0,32 u)); la Ees del VD baja
-// ×(1 − 0,06 u) (0,95 en el defecto; con 0,88 la PSAP caía un 8 %) para que el VD que eyecta más tiempo no suba gasto ni PAM. ILUSTRATIVO: Marcus es HAP crónica; en el
-// TEP agudo es extrapolación. Con u = 0 todo vale 1 y f = fSubida (0,62): g = 0 es el normal
-const tepVd = (u) => ({ f: 0.62 - 0.38 * u, durX: 1 + 0.32 * u, ees: 1 - 0.06 * u });
+// precoz (f 0,62 → 0,24 con u = 1: domo del chorro de IT, Zoghbi 2017, Fig. 29, PDF p. 49) y caída larga: durVd ×(1 + 0,28 u) hasta el
+// defecto (×1,23; Marcus ×1,32 en HAP), que vuelve a ×1,20 en el 100 %: con más la eyección larga vacía el VD y el TEP masivo pierde la
+// dilatación de las fichas (VD basal >41 mm, VD/VI >1; Lang 2015 p. 20). La Ees del VD baja ×(1 − 0,08 u) (0,94 en el defecto; con 0,88
+// la PSAP caía un 8 %) para que el VD que eyecta más tiempo no suba gasto ni PAM. ILUSTRATIVO: Marcus es HAP crónica; en el TEP agudo es
+// extrapolación. Con u = 0 todo vale 1 y f = fSubida (0,62): g = 0 es el normal
+const TEP_U_DEF = TEP_DEFECTO ** TEP_CURVA;   // u del defecto (≈0,807)
+const tepVd = (u) => ({ f: 0.62 - 0.38 * u, durX: u <= TEP_U_DEF ? 1 + 0.28 * u : 1 + 0.28 * TEP_U_DEF - (0.28 * TEP_U_DEF - 0.20) * (u - TEP_U_DEF) / (1 - TEP_U_DEF), ees: 1 - 0.08 * u });
 // Con g = 0 el TEP y la HP son el normal del motor: la subida del VD pasa de la del VI (g = 0) a la de la enfermedad (g ≥ FUNDE_VD_G) sin salto
 const FUNDE_VD_G = 0.15, fundeVd = (g) => Math.min(1, Math.max(0, g) / FUNDE_VD_G);
 const DILATADA_V0 = 60;                        // mL, volumen sin tensión del VI en la dilatada (ilustrativo)
