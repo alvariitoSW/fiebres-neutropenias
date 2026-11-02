@@ -51,14 +51,19 @@ const TABLA = [
   ['normal', 'normal', undefined, 53, 23, 22, 12, 4, 87, 5.0, 1.15, 4.0, 8.3],
   // P5a: 50 % con el mando curvado (u = g^0,6): antes 33, 14.6, 33, 22, 6, 83, 4.3, 1.74, 3.8, 7.7
   // P3 (tiempo de aceleración pulmonar <105 ms): el TEP baja la distensibilidad arterial y su resistencia máxima pasa de ×9,0 a ×6,6; antes 27, 12.9, 39, 26, 7, 81, 4.0, 2.10, 3.7, 7.0
-  ['TEP 50 %', 'tep', 0.5, 24, 12.2, 43, 15, 8, 80, 3.8, 2.34, 3.6, 6.9],
+  // 154 (VD del TEP más largo que el VI, 01/11/2026): antes 24, 12.2, 43, 15, 8, 80, 3.8, 2.34, 3.6, 6.9. El VD que eyecta más tiempo
+  // queda algo menos lleno (VD/VI 2,34 → 2,20) y la PSAP baja 2 mmHg (43 → 41); lo demás, igual
+  ['TEP 50 %', 'tep', 0.5, 25, 12.6, 41, 15, 8, 80, 3.8, 2.20, 3.7, 6.8],
   // P5a vuelta 2: el defecto es g 0,7 (submasivo, PAM 76): cifras de la salida del motor. Antes (g 0,6): 23, 12, 41, 28, 7, 79, 3.7, 2.37, 3.7, 7.1
   // P5a: el defecto del TEP pasa a submasivo (g 0,6, u = g^0,6): cifras de la salida del motor (barrido-tep.mjs); antes 13, 8.4, 43, 34, 9, 67, 2.8, 3.78, 3.5, 1.8
   // P3: antes 20, 11.1, 43, 30, 8, 76, 3.5, 2.69, 3.6, 6.2 (la PAPd de la columna baja: la arteria más rígida pulsa más y su diastólica cae)
-  ['TEP defecto', 'tep', 'def', 17, 10.2, 46, 16, 9, 74, 3.2, 3.05, 3.6, 5.1],
+  // 154: antes 17, 10.2, 46, 16, 9, 74, 3.2, 3.05, 3.6, 5.1. FEVD 17 → 18,4 y TAPSE 10,2 → 10,7 (el VD eyecta un 23 % más de tiempo);
+  // VD/VI 3,05 → 2,84 (menos lleno); PSAP 46 → 44 (−4 %); E/e′ 5,1 → 5,6 (tabla anterior ya 5,3 en el motor: la e′ sigue a la carga)
+  ['TEP defecto', 'tep', 'def', 18.4, 10.7, 44, 16, 9, 75, 3.3, 2.84, 3.6, 5.6],
   // P4b: E/e′ 8,3 → 8,8 en la fila del TEP al 100 % (la tabla §3 era de antes de la cola entre latidos y del tope ×9,0; el motor da 8,79)
   // P3: antes 9, 6.6, 40, 33, 9, 58, 2.3, 4.83, 3.5, 7.1
-  ['TEP 100 %', 'tep', 1, 9, 6.5, 43, 18, 9, 59, 2.3, 4.84, 3.5, 7.0],
+  // 154: antes 9, 6.5, 43, 18, 9, 59, 2.3, 4.84, 3.5, 7.0 (FEVD 9,2 → 9,4, PSAP 43,7 → 42,4, VD/VI 4,77 → 4,68: dentro del ±5 %; se rehace con el motor)
+  ['TEP 100 %', 'tep', 1, 9.4, 6.7, 42, 18, 9, 59, 2.4, 4.68, 3.5, 6.9],
   ['HP crónica defecto', 'hpcronica', 'def', 32, 14.1, 97, 30, 7, 81, 4.0, 1.76, 8.2, 7.0],
   // FEVD 15 → 14,1: la tabla §3 era anterior al desplazamiento del tabique M0c (b3-paso4 g3, 0a84f734; Marino cap. 16 p. 40); el motor da 14,1
   ['HP crónica 100 %', 'hpcronica', 1, 14.1, 9.3, 95, 37, 15, 77, 3.1, 3.69, 8.2, 6.5],
